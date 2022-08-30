@@ -32,6 +32,7 @@ public class CurrencyToolServiceImpl implements CurrencyToolService {
         CSVParser csvParser = new CSVParser(new FileReader(file), CSVFormat.EXCEL.withFirstRecordAsHeader());
         Map<String, Integer> header = csvParser.getHeaderMap();
         repository.saveColumns(header);
+        currencyRepository.saveCurrencies(header);
 
         csvParser.iterator().forEachRemaining(csvRecord -> repository.saveRecord(csvRecord, (record) -> {
             DataRow.Builder builder = new DataRow.Builder();
@@ -61,6 +62,11 @@ public class CurrencyToolServiceImpl implements CurrencyToolService {
 
     @Override
     public Double convertCurrency(Date date, Currency source, Currency target, Double amount) throws Exception {
+        if (!currencyRepository.exists(source)) {
+            throw new Exception(String.format("Conversion failed. Could not find currency %s", source.getName()));
+        } else if (!currencyRepository.exists(target)) {
+            throw new Exception(String.format("Conversion failed. Could not find currency %s", target.getName()));
+        }
         Optional<DataRow> dataRow = repository.findByDate(date);
         if (dataRow.isPresent()) {
             Optional<Double> sourceRef = dataRow.get().getCurrencyValue(source.getName());
@@ -79,7 +85,10 @@ public class CurrencyToolServiceImpl implements CurrencyToolService {
     }
 
     @Override
-    public Double findHighestReference(Date startDate, Date endDate, Currency currency) {
+    public Double findHighestReference(Date startDate, Date endDate, Currency currency) throws Exception {
+        if (!currencyRepository.exists(currency)) {
+            throw new Exception(String.format("Action failed. Could not find currency %s", currency.getName()));
+        }
         List<DataRow> rows = repository.findByRange(toLocalDate(startDate), toLocalDate(endDate));
         Comparator<Double> comparator = Double::compareTo;
         Optional<Double> max = rows.stream()
@@ -92,7 +101,10 @@ public class CurrencyToolServiceImpl implements CurrencyToolService {
     }
 
     @Override
-    public Double findAverageReference(Date startDate, Date endDate, Currency currency) {
+    public Double findAverageReference(Date startDate, Date endDate, Currency currency) throws Exception {
+        if (!currencyRepository.exists(currency)) {
+            throw new Exception(String.format("Action failed. Could not find currency %s", currency.getName()));
+        }
         List<DataRow> rows = repository.findByRange(toLocalDate(startDate), toLocalDate(endDate));
         Function<List<Double>, Double> averageFunction = (doubles) -> {
             double sum = doubles.stream().mapToDouble(Double::doubleValue).sum();

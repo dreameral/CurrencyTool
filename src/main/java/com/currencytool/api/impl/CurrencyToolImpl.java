@@ -45,12 +45,12 @@ public class CurrencyToolImpl implements CurrencyTool {
     }
 
     @Override
-    public Double highestReference(Date startDate, Date endDate, String currency) {
+    public Double highestReference(Date startDate, Date endDate, String currency) throws Exception {
         return service.findHighestReference(startDate, endDate, new Currency(currency));
     }
 
     @Override
-    public Double averageReference(Date startDate, Date endDate, String currency) {
+    public Double averageReference(Date startDate, Date endDate, String currency) throws Exception {
         return service.findAverageReference(startDate, endDate, new Currency(currency));
     }
 

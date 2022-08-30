@@ -13,7 +13,7 @@ import static com.currencytool.util.Utils.toLocalDate;
 
 public class CurrencyToolRepositoryImpl implements CurrencyToolRepository {
 
-    private List<DataRow> rows = new ArrayList<>();
+    private final List<DataRow> rows = new ArrayList<>();
     private final List<String> columns = new ArrayList<>();
 
     @Override

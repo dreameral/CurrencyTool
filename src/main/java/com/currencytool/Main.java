@@ -98,7 +98,10 @@ public class Main {
             System.out.printf("%.5f", result);
             System.out.println();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            if (e instanceof NumberFormatException) {
+                System.out.printf("Invalid amount %s%n", args[4]);
+            } else
+                System.out.println(e.getMessage());
         }
     }
 

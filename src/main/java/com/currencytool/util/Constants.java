@@ -7,7 +7,7 @@ public class Constants {
             "Usage:\n" +
             "  currencyTool> loadFile <filePath>\n" +
             "  currencyTool> showAllReferences <date>\n" +
-            "  currencyTool> convertCurrency <date> <currency1> <currency2>\n" +
+            "  currencyTool> convertCurrency <date> <currency1> <currency2> <amount>\n" +
             "  currencyTool> highestReference <startDate> <endDate> <currency>\n" +
             "  currencyTool> averageReference <startDate> <endDate> <currency>\n" +
             "  currencyTool> help\n" +

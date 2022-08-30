@@ -5,15 +5,20 @@ import com.currencytool.repository.CurrencyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class CurrencyRepositoryImpl implements CurrencyRepository {
 
     private final List<Currency> currencies = new ArrayList<>();
 
     @Override
-    public void saveCurrencies(List<String> currencyNames) {
-        currencies.addAll(currencyNames.stream().map(Currency::new).toList());
+    public void saveCurrencies(Map<String, Integer> columns) {
+        columns.keySet().forEach(key -> {
+            if (!key.equals("Date")) {
+                // the only column that's not a currency is Date
+                currencies.add(new Currency(key));
+            }
+        });
     }
 
     @Override
